@@ -83,7 +83,7 @@ pageA依赖于base模块。smartcomb自动拼合依赖的的文件。
 只修改相对路径的图片，文件后缀限于png,gif,png
 
     background-image: url("images/q4.jpg"); /*相对路径，修正*/
-    background-image: url('./images/q3.jpg'); /*相对路径，修正*/
+    background-image: url('../images/q3.jpg'); /*相对路径，修正*/
     background-image: url(./images/q3.jpg); /*相对路径，修正*/
     background-image: url(/abc/images/q2.jpg); /*绝对路径，无视*/
     background-image: url(http://abc.com/a.png); /*绝对路径，无视*/
