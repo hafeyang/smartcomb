@@ -9,6 +9,7 @@ smartcomb是一个用php实现的web模块拼合器，相对于其他的代码拼合工具，如下特性：
 * 支持多种配置切换
 * 自动修改css,less中的图片路径，无需担心拼合后css图片路径出错
 * 支持php命令行调用，支持命令直接生成拼合静态文件
+* 缓存支持
 
 ##模块声明配置
 
@@ -75,6 +76,17 @@ pageA依赖于base模块。smartcomb自动拼合依赖的的文件。
     php smartcomb.php -profile default -type js -modules pageA > pageA-dep.js
 
 参数与web调用方式一致
+
+
+##css中引用图片路径修改规则
+
+只修改相对路径的图片，文件后缀限于png,gif,png
+
+    background-image: url("images/q4.jpg"); /*相对路径，修正*/
+    background-image: url('./images/q3.jpg'); /*相对路径，修正*/
+    background-image: url(./images/q3.jpg); /*相对路径，修正*/
+    background-image: url(/abc/images/q2.jpg); /*绝对路径，无视*/
+    background-image: url(http://abc.com/a.png); /*绝对路径，无视*/
 
 =============
 

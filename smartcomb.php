@@ -92,12 +92,16 @@
 		//$curFileDir 当前css/less 文件的相对路径文件夹
 		$curFileDir = preg_replace('/(\/)[^\/]+$/', '$1', $filePath);
 		$imgPath = preg_replace("/^\.\//", "",$matches[2]); //图片在css中的定义路径 去掉  ./
-		//将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
-		while(preg_match("/^\.\.\//", $imgPath)){
-			$imgPath = preg_replace("/^\.\.\//","",$imgPath);
-			$curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
+		if(!preg_match("/^\//",$imgPath) && !preg_match("/\/\//",$imgPath)){ // 以/开头 有// 视为绝对路径 不处理图片url
+			//将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
+			while(preg_match("/^\.\.\//", $imgPath)){
+				$imgPath = preg_replace("/^\.\.\//","",$imgPath);
+				$curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
+			}
+			return $matches[1].$curFileDir.$imgPath.$matches[4];
+		}else{
+			return $matches[1].$imgPath.$matches[4];
 		}
-		return $matches[1].$curFileDir.$imgPath.$matches[4];
 	}
 
 	foreach ($arrFiles as $idx => $filePath) {
@@ -114,7 +118,33 @@
 		}
 		$content = $content.$filecontent;
 
-	}
-	echo $content;
-	
+    }
+    if($_REQUEST){
+        if( $type =="css" ){
+            header('Content-type: text/css');
+        }
+        //  cache reference :http://www.jonasjohn.de/snippets/php/caching.htm
+        $HashID = md5($content);
+        $headers = apache_request_headers();
+        header('ETag: ' . $HashID);
+        $DoIDsMatch = (isset($headers['If-None-Match']) and ereg($HashID, $headers['If-None-Match']));
+        $LastChangeTime = 1144055759;
+        $ExpireTime = 60*60*24*30; //default 30 days expire
+        header('Cache-Control: max-age=' . $ExpireTime); // must-revalidate
+        header('Expires: '.gmdate('D, d M Y H:i:s', time()+$ExpireTime).' GMT');
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s', $LastChangeTime).' GMT');
+        $PageWasUpdated = !(isset($headers['If-Modified-Since']) and strtotime($headers['If-Modified-Since']) == $LastChangeTime);
+        if(!$PageWasUpdated or $DoIDsMatch){
+            header('HTTP/1.1 304 Not Modified');
+            header('Connection: close');
+        }else{
+            header('HTTP/1.1 200 OK');
+            echo $content;
+        }
+
+    }else{
+        echo $content;
+    }
+
 ?>
+
