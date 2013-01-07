@@ -22,7 +22,7 @@
  * php smartcomb.php -type js -modules m1,m2
  */
 	//禁用错误报告
-	//error_reporting(0);
+	error_reporting(0);
 	$params = $_REQUEST;
 	if(!$params){
 		foreach($argv as  $idx => $p){
