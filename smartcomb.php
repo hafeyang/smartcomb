@@ -22,7 +22,7 @@
  * php smartcomb.php -type js -modules m1,m2
  */
 	//禁用错误报告
-	error_reporting(0);
+	//error_reporting(0);
 	$params = $_REQUEST;
 	if(!$params){
 		foreach($argv as  $idx => $p){
@@ -92,23 +92,25 @@
 		//$curFileDir 当前css/less 文件的相对路径文件夹
 		$curFileDir = preg_replace('/(\/)[^\/]+$/', '$1', $filePath);
 		$imgPath = preg_replace("/^\.\//", "",$matches[2]); //图片在css中的定义路径 去掉  ./
-		if(!preg_match("/^\//",$imgPath) && !preg_match("/\/\//",$imgPath)){ // 以/开头 有// 视为绝对路径 不处理图片url
-			//将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
-			while(preg_match("/^\.\.\//", $imgPath)){
-				$imgPath = preg_replace("/^\.\.\//","",$imgPath);
-				$curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
-			}
-			return $matches[1].$curFileDir.$imgPath.$matches[4];
-		}else{
-			return $matches[1].$imgPath.$matches[4];
+		//将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
+		while(preg_match("/^\.\.\//", $imgPath)){
+			$imgPath = preg_replace("/^\.\.\//","",$imgPath);
+			$curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
 		}
+		return $matches[1].$curFileDir.$imgPath.$matches[4];
 	}
-
+    
+    $LastChangeTime = 1144055759; //文件最后的修改时间
 	foreach ($arrFiles as $idx => $filePath) {
 		$realPath = realpath($filePath);
 		if(!$realPath){
-			$filecontent="/*!file ".$filePath." does not exists*/";
+            $filecontent="/*!file ".$filePath." does not exists*/";
 		}else{
+            //取得文件列表中最近修改的文件作为拼合后文件的最后修改时间
+            $fileLastChangeTime = filemtime($realPath);
+            if($fileLastChangeTime  > $LastChangeTime){
+                $LastChangeTime = $fileLastChangeTime;
+            }
 			$filecontent = readFileStr($realPath);
 			if(preg_match("/\.css$|\.less$/", $filePath)){
 				//拼合css,less中的相对路径
@@ -128,7 +130,6 @@
         $headers = apache_request_headers();
         header('ETag: ' . $HashID);
         $DoIDsMatch = (isset($headers['If-None-Match']) and ereg($HashID, $headers['If-None-Match']));
-        $LastChangeTime = 1144055759;
         $ExpireTime = 60*60*24*30; //default 30 days expire
         header('Cache-Control: max-age=' . $ExpireTime); // must-revalidate
         header('Expires: '.gmdate('D, d M Y H:i:s', time()+$ExpireTime).' GMT');
@@ -147,4 +148,3 @@
     }
 
 ?>
-

@@ -2,7 +2,7 @@
 
 ===============
 
-smartcomb是一个用php实现的web模块拼合器，相对于其他的代码拼合工具，如下特性：
+smartcomb是一个用php实现的web模块拼合器，相对于其他的代码拼合工具，它有如下特性：
 
 * 可以拼合任意类型的文件，不限于js文件。
 * 集中并声明依赖，自动分析依赖拼合，按需加载。
@@ -10,6 +10,10 @@ smartcomb是一个用php实现的web模块拼合器，相对于其他的代码拼合工具，如下特性：
 * 自动修改css,less中的图片路径，无需担心拼合后css图片路径出错
 * 支持php命令行调用，支持命令直接生成拼合静态文件
 * 缓存支持
+
+##github地址
+
+    git clone https://github.com/hafeyang/smartcomb.git
 
 ##模块声明配置
 
@@ -87,6 +91,23 @@ pageA依赖于base模块。smartcomb自动拼合依赖的的文件。
     background-image: url(./images/q3.jpg); /*相对路径，修正*/
     background-image: url(/abc/images/q2.jpg); /*绝对路径，无视*/
     background-image: url(http://abc.com/a.png); /*绝对路径，无视*/
+
+
+##缓存策略
+
+可以参见php实现缓存 [http://www.jonasjohn.de/snippets/php/caching.htm](http://www.jonasjohn.de/snippets/php/caching.htm)
+
+###Etag缓存
+
+将拼合的文件内容md5值后作为ETag的值写入到 http header，这样文件修改ETag也随之更新，浏览器端缓存失效
+
+###通过Last-Modified
+
+将http header中的 Last-Modified 设置成拼合文件中最近修改的文件时间，通过，`Last-Modified` `If-Modified-Since`缓存。
+
+###默认的缓存时间
+
+如果ETag,和Last-Modified 都不改变，缓存30天失效，通过http header 中的 `Cache-Control` ,`Expires`实现
 
 =============
 
