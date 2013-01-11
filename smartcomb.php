@@ -84,7 +84,7 @@
 		}
 	}
 	
-	$content = "/*! modules:".join(",",$arrModules)." -> files ".join(",",$arrFiles)." combined by smartcomb */\n";
+	$content = "/*! modules:".join(",",$arrModules).". -> files:".join(",",$arrFiles).". combined by smartcomb */\n";
 	//拼合文件
 	
 	function replaceImgPath($matches){
@@ -92,12 +92,16 @@
 		//$curFileDir 当前css/less 文件的相对路径文件夹
 		$curFileDir = preg_replace('/(\/)[^\/]+$/', '$1', $filePath);
 		$imgPath = preg_replace("/^\.\//", "",$matches[2]); //图片在css中的定义路径 去掉  ./
-		//将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
-		while(preg_match("/^\.\.\//", $imgPath)){
-			$imgPath = preg_replace("/^\.\.\//","",$imgPath);
-			$curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
+		if(!preg_match("/^\//",$imgPath) && !preg_match("/\/\//",$imgPath)){ // 以/开头 有// 视为绝对路径 不处理图片url
+			//将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
+			while(preg_match("/^\.\.\//", $imgPath)){
+				$imgPath = preg_replace("/^\.\.\//","",$imgPath);
+				$curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
+			}
+			return $matches[1].$curFileDir.$imgPath.$matches[4];
+		}else{
+			return $matches[1].$imgPath.$matches[4];
 		}
-		return $matches[1].$curFileDir.$imgPath.$matches[4];
 	}
     
     $LastChangeTime = 1144055759; //文件最后的修改时间
@@ -148,3 +152,4 @@
     }
 
 ?>
+
