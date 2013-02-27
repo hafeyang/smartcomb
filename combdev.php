@@ -1,6 +1,6 @@
 <?php
 /*
- * buildcomb.php用于将代码中使用了smartcomb.php?type=xxx&modules=aa,bb 的地方替换成一个静态文件的引用
+ * builddev.php用于将buildcomb.php替换的引用还原
  * 使用方法： php buildcomb.php -target the/path -ext html,php -exclude xxx.html
  *  target: 目标文件夹，默认是当前文件夹 需要确保文件夹中有且只有一个smartcomb.php文件
  *  ext: 需要替换的文件后缀，默认html,多个以,分隔
@@ -100,39 +100,33 @@ function readFileStr($file_dir){
 }
 
 $buildCount = 0 ;
-function replaceCombRef($match){
+function replaceStaticRef($match){
     global $staticFilesDir;
     global $buildCount;
     $buildCount++;
-    $tmpFile = "_tmp.tmp";
-    if(file_exists($tmpFile)){
-        unlink($tmpFile);
+    preg_match("/^(.+)([a-zA-Z0-9]{32,32})\.(\w+)/",$match[2],$fileMatch,PREG_OFFSET_CAPTURE);
+    $refPath = $fileMatch[1][0];// 引用的相对路径
+    $md5 = $fileMatch[2][0];
+    $type = $fileMatch[3][0];
+    $arrFound = find($staticFilesDir,$md5.".".$type);
+    $fileContent = readFileStr($arrFound[0]);
+    preg_match("/profile\:(\w+)\smodules\:(\S+)\s/m",$fileContent,$modulesMatch,PREG_OFFSET_CAPTURE);
+    if(count($modulesMatch)==3){
+        $profile = $modulesMatch[1][0];
+        $modules = $modulesMatch[2][0];
+        $newRef = $refPath."smartcomb.php?type=".$type."&profile=".$profile."&modules=".$modules; 
+        echo $match[2]."替换为".$newRef."\n";
+        return $match[1].$newRef.$match[3];
     }
-    preg_match("/([^\"\']+)smartcomb\.php\?/",$match[2],$refPathMatch,PREG_OFFSET_CAPTURE);
-    $refPath = $refPathMatch[1][0];
-    $cmd =  preg_replace("/[^\"\']+smartcomb\.php\?/", "smartcomb.php ",$match[2]);
-    preg_match("/type\=(\w+)/",$cmd,$typematch,PREG_OFFSET_CAPTURE);
-    $type = $typematch[1][0];
-    $cmd = "php ".$staticFilesDir . preg_replace("/\&?(\w+)=/", " -$1 ",$cmd). " > ".$tmpFile;
-    exec($cmd);
-    $result = readFileStr($tmpFile);
-    $md5 = md5($result);
-    file_put_contents($staticFilesDir.$md5.".".$type, $result);
-    if(file_exists($tmpFile)){
-        unlink($tmpFile);
-    }
-    echo "替换引用 ".$match[2]." ,生成文件".$staticFilesDir.$md5.".".$type."\n";
-
-    return $match[1].$refPath.$md5.".".$type.$match[3];
-    //return $match[1].$match[2].$match[3];
+    return $match[1].$match[2].$match[3];
 }
 function buildFile($filePath){
     global $buildCount ; 
     $buildCount = 0 ; 
     echo "\n替换文件".$filePath."\n";
     $fileContent = readFileStr($filePath);
-    if(preg_match("/(\"|\')([^\"\']+smartcomb\.php[^\"\']+)(|\"|\')/im",$fileContent)){
-        $fileContent = preg_replace_callback("/(\"|\')([^\"\']+smartcomb\.php[^\"\']+)(\"|\')/im", "replaceCombRef", $fileContent);
+    if(preg_match("/(\"|\')([^\"\']+[a-zA-Z0-9]{32,32}\.[^\"\']+)(|\"|\')/im",$fileContent)){
+        $fileContent = preg_replace_callback("/(\"|\')([^\"\']+[a-zA-Z0-9]{32,32}\.[^\"\']+)(\"|\')/im", "replaceStaticRef", $fileContent);
     }
     echo "文件".$filePath."替换".$buildCount."处\n";
     file_put_contents($filePath, $fileContent);

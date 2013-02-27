@@ -45,8 +45,8 @@ function readFileStr($file_dir){
 //读取配置文件解析成json
 $cfg = json_decode(readFileStr($modulesJSPath."modules.js"));
 // $params["profile"] 读取配置文件中的第一层数据
-$profileConfig = ( isset($params["profile"])  &&  isset($cfg->$params["profile"]))  ?
-     $cfg->$params["profile"] : $cfg->default;
+$profile = isset($params["profile"]) ? $params["profile"] :"default";
+$profileConfig = isset($cfg->$profile) ?  $cfg->$profile : $cfg->default;
 
 //basePath 路径，拼接在文件路径前
 $basePath = $modulesJSPath.(isset($profileConfig->basePath) ?  $profileConfig->basePath : "");
@@ -88,7 +88,7 @@ foreach ($arrModules as $idx => $m) {
     }
 }
 
-$content = "/*! modules:".join(",",$arrModules)." -> files ".join(",",$arrFiles)." combined by smartcomb */\n";
+$content = "/*! profile:".$profile." modules:".join(",",$arrModules)." -> files ".join(",",$arrFiles)." combined by smartcomb */\n";
 //拼合文件
 
 function replaceImgPath($matches){

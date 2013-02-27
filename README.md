@@ -16,6 +16,10 @@ smartcombÊÇÒ»¸öÓÃphpÊµÏÖµÄwebÄ£¿éÆ´ºÏÆ÷£¬Ïà¶ÔÓÚÆäËûµÄ´úÂëÆ´ºÏ¹¤¾ß£¬ËüÓĞÈçÏÂÌØĞÔ£
 
     git clone https://github.com/hafeyang/smartcomb.git
 
+##Smartcomb½á¹¹¼òÍ¼
+
+
+
 ##Ä£¿éÉùÃ÷ÅäÖÃ
 
 smartcombÊÇÓÉ`smartcomb.php` ºÍ`modules.js`¹¹³É£¬`modules.js`ÊÇÒ»¸öjsonÎÄ¼ş£¬±ØĞëÊÇÑÏ¸ñµÄjson¸ñÊ½£¬keyĞèÒª¼ÓÉÏË«ÒıºÅ£¬ÓÃÓÚÄ£¿éÉùÃ÷¡£¸ñÊ½Îª£º
