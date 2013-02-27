@@ -18,14 +18,16 @@ smartcombÊÇÒ»¸öÓÃphpÊµÏÖµÄwebÄ£¿éÆ´ºÏÆ÷£¬Ïà¶ÔÓÚÆäËûµÄ´úÂëÆ´ºÏ¹¤¾ß£¬ËüÓĞÈçÏÂÌØĞÔ£
 
 ##Smartcomb½á¹¹¼òÍ¼
 
+<img src="https://raw.github.com/hafeyang/smartcomb/master/smartcomb.png" width="800" />
 
+[µã»÷¿ÉÒÔ²é¿´´óÍ¼](https://raw.github.com/hafeyang/smartcomb/master/smartcomb.png)
 
 ##Ä£¿éÉùÃ÷ÅäÖÃ
 
 smartcombÊÇÓÉ`smartcomb.php` ºÍ`modules.js`¹¹³É£¬`modules.js`ÊÇÒ»¸öjsonÎÄ¼ş£¬±ØĞëÊÇÑÏ¸ñµÄjson¸ñÊ½£¬keyĞèÒª¼ÓÉÏË«ÒıºÅ£¬ÓÃÓÚÄ£¿éÉùÃ÷¡£¸ñÊ½Îª£º
 
     {
-    	[profile]:{
+        [profile]:{
     		"basePath": "ËùÓĞÎÄ¼ş¹²ÓĞµÄ»ù´¡Â·¾¶",
     		"modules":{
     			"[modulename]":{
