@@ -8,7 +8,7 @@ smartcombÊÇÒ»¸öÓÃphpÊµÏÖµÄwebÄ£¿éÆ´ºÏÆ÷£¬Ïà¶ÔÓÚÆäËûµÄ´úÂëÆ´ºÏ¹¤¾ß£¬ËüÓĞÈçÏÂÌØĞÔ£
 * ¼¯ÖĞ²¢ÉùÃ÷ÒÀÀµ£¬×Ô¶¯·ÖÎöÒÀÀµÆ´ºÏ£¬°´Ğè¼ÓÔØ¡£
 * Ö§³Ö¶àÖÖÅäÖÃÇĞ»»
 * ×Ô¶¯ĞŞ¸Äcss,lessÖĞµÄÍ¼Æ¬Â·¾¶£¬ÎŞĞèµ£ĞÄÆ´ºÏºócssÍ¼Æ¬Â·¾¶³ö´í
-* Ö§³ÖphpÃüÁîĞĞµ÷ÓÃ£¬Ö§³ÖÃüÁîÖ±½ÓÉú³ÉÆ´ºÏ¾²Ì¬ÎÄ¼ş
+* Ö§³ÖphpÃüÁîĞĞµ÷ÓÃ£¬Ö§³ÖÃüÁîÖ±½ÓÉú³ÉÆ´ºÏ¾²Ì¬ÎÄ¼ş£¬ÇÒ¹ı³Ì¿ÉÄæ
 * »º´æÖ§³Ö
 * Ö§³ÖÖ±½ÓÉú³É¾²Ì¬ÎÄ¼ş²¢¸üĞÂµ÷ÓÃ
 
@@ -130,11 +130,9 @@ pageAÒÀÀµÓÚbaseÄ£¿é¡£smartcomb×Ô¶¯Æ´ºÏÒÀÀµµÄµÄÎÄ¼ş¡£
     <script type="text/javascript" src="path/to/[md5].js"></script>
     <link href="path/to/[md5].css" type="text/css" charset="utf-8"/>
 
-
-
 Ìæ»»ÃüÁîÎª£º
 
-    php path/to/buildcomb.php  -target=target/dir -prefix=html,php -exclude aboutus.html,contact.html
+    php path/to/combbuild.php  -target=target/dir -prefix=html,php -exclude aboutus.html,contact.html
 
 ¸ÃÃüÁî»áÔÚsmartcomb.phpËùÔÚÄ¿Â¼Éú³ÉÒÔÆ´ºÏÎÄ¼şÄÚÈİMD5ÖµÃüÃûµÄÎÄ¼ş£¬Í¬Ê±¸üĞÂsmartcomb.phpµÄÒıÓÃ¡£
 
@@ -144,6 +142,35 @@ pageAÒÀÀµÓÚbaseÄ£¿é¡£smartcomb×Ô¶¯Æ´ºÏÒÀÀµµÄµÄÎÄ¼ş¡£
 * ext ĞèÒªÌæ»»µÄÎÄ¼şÃûºó×º£¬¶à¸öºó×ºÒÔ,·Ö¸ô£¬Ä¬ÈÏÎªhtml
 * exclude ĞèÒªÅÅ³ıµÄÎÄ¼ş£¬¶à¸öÎÄ¼şÃûÒÔ,·Ö¸ô,Ö»ÒªÎÄ¼şÍêÕûÂ·¾¶ÖĞ°üº¬¸ÃÎÄ¼şÃû½«»áÅÅ³ö£¬Ä¬ÈÏ»áÅÅ³ösmartcomb×ÔÉíµÄÎÄ¼ş
 
+
+##¾²Ì¬ÎÄ¼ş»¹Ô­³Ésmartcomb.phpÒıÓÃ
+
+
+¿ÉÒÔ½«´úÂëÖĞµÄ`[md5].js [md5].css`»¹Ô­Îª`smartcomb.php`ÒıÓÃ£º
+
+    <script type="text/javascript" src="path/to/[md5].js"></script>
+    <link href="path/to/[md5].css" type="text/css" charset="utf-8"/>
+
+
+»¹Ô­Îª
+
+    <script type="text/javascript" src="path/to/smartcomb.php?type=js&modules=pageA"></script>
+    <link href="path/to/smartcomb.php?type=css&modules=pageA" type="text/css" charset="utf-8"/>
+
+
+
+
+Ìæ»»ÃüÁîÎª£º
+
+    php path/to/combdev.php  -target=target/dir -prefix=html,php -exclude aboutus.html,contact.html
+
+
+²ÎÊı¶¨Òå£º
+
+* target ĞèÒªÌæ»»µÄÄ¿±êÄ¿Â¼£¬×¢Òâ¸ÃÄ¿Â¼ÖĞÓĞÇÒÖ»ÓĞÎ¨Ò»smartcomb.php ÎÄ¼ş£¬ÒòÎªÉú³ÉµÄÎÄ¼şÓësmartcomb.phpÍ¬Ä¿Â¼£¬Ä¬ÈÏÎªµ±Ç°Ä¿Â¼
+* ext ĞèÒªÌæ»»µÄÎÄ¼şÃûºó×º£¬¶à¸öºó×ºÒÔ,·Ö¸ô£¬Ä¬ÈÏÎªhtml
+* exclude ĞèÒªÅÅ³ıµÄÎÄ¼ş£¬¶à¸öÎÄ¼şÃûÒÔ,·Ö¸ô,Ö»ÒªÎÄ¼şÍêÕûÂ·¾¶ÖĞ°üº¬¸ÃÎÄ¼şÃû½«»áÅÅ³ö£¬Ä¬ÈÏ»áÅÅ³ösmartcomb×ÔÉíµÄÎÄ¼ş
+* 
 
 =============
 
