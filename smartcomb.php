@@ -92,15 +92,18 @@ $content = "/*! profile:".$profile." modules:".join(",",$arrModules)." -> files 
 //拼合文件
 
 function replaceImgPath($matches){
-    global $filePath; 
+	global $filePath; 
     //$curFileDir 当前css/less 文件的相对路径文件夹
     $curFileDir = preg_replace('/(\/)[^\/]+$/', '$1', $filePath);
-    $imgPath = preg_replace("/^\.\//", "",$matches[2]); //图片在css中的定义路径 去掉  ./
+	$imgPath = preg_replace("/^\.\//", "",$matches[2]); //图片在css中的定义路径 去掉  ./
+	if(preg_match("/^\/|\:/",$imgPath)){ //以/ 开头 或者含有: 视为 绝对路径
+		return $matches[0];
+	}
     //将$imgPath中的 ^../ 替换掉，同时curFileDir 减少一级目录
     while(preg_match("/^\.\.\//", $imgPath)){
         $imgPath = preg_replace("/^\.\.\//","",$imgPath);
         $curFileDir = preg_replace("/[^\/]+\/$/", "", $curFileDir);
-    }
+	}
     return $matches[1].$curFileDir.$imgPath.$matches[4];
 }
 
